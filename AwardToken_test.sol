@@ -21,14 +21,22 @@ contract AwardTokenTest {
         return Assert.equal(awtkn.startRound(), true, "startRound return is false");
     }
 
-    // TODO: implement greaterThan function
-    /* function balanceShouldBe_100() public constant returns (bool) {
-        address to = 0xe60667640C07E654E37b7082aE4E629cb0a7605f;
-        address(awtkn).call.gas(70000).value(0)("mint",[to, 100]);
-        return Assert.equal(awtkn.balanceOf(to), 100, "balance should be 100");
-    } */
     function ownerShouldBeTester() public constant returns (bool) {
         address tester = this;
         return Assert.equal(awtkn.owner(), tester, "owner should be tester");
+    }
+}
+
+contract AwardTokenBalanceTest {
+    AwardToken awtkn;
+    address to = 0xe60667640C07E654E37b7082aE4E629cb0a7605f;
+
+    function beforeAll() {
+        awtkn = new AwardToken();
+        address(awtkn).call.gas(80000).value(0)("mint",[to, 100]);
+    }
+
+    function balanceShouldBeGreaterThan_0() public constant returns (bool) {
+        return Assert.greaterThan(uint256(awtkn.balanceOf(to)), uint256(0), "balance should be greater than 0");
     }
 }
